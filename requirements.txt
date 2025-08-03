@@ -1,0 +1,14 @@
+DateTime==5.5
+numpy==2.3.2
+pandas==2.3.1
+pandas-stubs==2.3.0.250703
+psycopg2-binary==2.9.10
+PyPDF2==3.0.1
+python-dateutil==2.9.0.post0
+python-dotenv==1.1.1
+pytz==2025.2
+six==1.17.0
+SQLAlchemy==2.0.42
+typing_extensions==4.14.1
+tzdata==2025.2
+zope.interface==7.2
