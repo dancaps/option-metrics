@@ -1,7 +1,8 @@
 import argparse
+
+from src.analysis.analyzer import Analyzer
+from src.data_ingestion.data_ingestor import DataIngestor
 from src.env_setup import logger, DB_URL, FILE_PATH, DATASOURCE
-from src.data_ingestion.data_ingestion import ingest_data
-from src.analysis.analysis import calculate_put_call_ratio
 from src.helpers import list_tables, drop_table
 
 
@@ -19,7 +20,7 @@ def main():
 
     if args.ingest:
         logger.info("Starting data ingestion...")
-        ingest_data(logger, DB_URL, FILE_PATH, DATASOURCE)
+        DataIngestor.ingest_data(logger, DB_URL, FILE_PATH, DATASOURCE)
         logger.info("Data ingestion completed.")
         did_action = True
 
@@ -28,7 +29,7 @@ def main():
             logger.info("Both --source_table and --output_table must be specified for analysis.")
             return
         logger.info("Starting Put-Call Ratio analysis...")
-        calculate_put_call_ratio(DB_URL, args.source_table, args.output_table, logger)
+        Analyzer.calculate_put_call_ratio(DB_URL, args.source_table, args.output_table, logger)
         logger.info("Put-Call Ratio analysis completed.")
         did_action = True
 
