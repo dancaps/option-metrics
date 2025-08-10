@@ -13,6 +13,11 @@ Example usage:
      python -m main --ingest
    ```
 
+Tests can be run with:
+   ```bash
+     python -m unittest discover -s tests
+   ```
+
 ### Data processing flow
 Based on the provided information (and for demonstration purposes), the data processing flow is outlined in the diagram 
 below.
@@ -38,7 +43,23 @@ strategy classes.
 - The ingested data is temporarily stored in a staging table before being analyzed.
 
 ## Analysis Module
-The analysis module is responsible for analyzing the ingested data.
+
+The methods in the analysis module perform various analyses on the ingested data and writing the results to output 
+tables.
+
+#### Put/Call Ratio Analysis:
+- Groups data by Date, Expiration, and CallPut to aggregate volumes for calls and puts.
+- Calculates the daily Put-Call Ratio as Put Volume divided by Call Volume.
+- Computes the previous day's ratio and the change from the previous day for each expiration.
+- Flags days with significant changes in the ratio (absolute change > 0.5).
+- Saves the analysis results to the specified output table in the database.
+
+#### Volume and Open Interest Analysis:
+- Calculates average volume per option.
+- Flags rows where volume is more than 2x average.
+- Calculates day-over-day open interest change and flags >50% changes.
+- Adds strike and expiration buckets for grouping.
+- Saves the analysis results to the specified output table in the database.
 
 ## Thoughts about the overall design of the solution:
 Ideally, in production the incoming data would come in via a streaming service like AWS Kinesis or Kafka, and the data 

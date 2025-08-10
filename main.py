@@ -10,6 +10,7 @@ def main():
     parser = argparse.ArgumentParser(description="Main entry point for the project.")
     parser.add_argument('--ingest', action='store_true', help='Enable data ingestion')
     parser.add_argument('--putcall', action='store_true', help='Run Put-Call Ratio analysis')
+    parser.add_argument('--volumeoi', action='store_true', help='Run Volume/Open Interest analysis')
     parser.add_argument('--listtables', action='store_true', help='List all tables in the database')
     parser.add_argument('--droptable', type=str, help='Drop the specified table from the database')
     parser.add_argument('--source_table', type=str, help='Source table for analysis')
@@ -31,6 +32,15 @@ def main():
         logger.info("Starting Put-Call Ratio analysis...")
         Analyzer.calculate_put_call_ratio(DB_URL, args.source_table, args.output_table, logger)
         logger.info("Put-Call Ratio analysis completed.")
+        did_action = True
+
+    if args.volumeoi:
+        if not args.source_table or not args.output_table:
+            logger.info("Both --source_table and --output_table must be specified for analysis.")
+            return
+        logger.info("Starting Volume/Open Interest analysis...")
+        Analyzer.analyze_volume_open_interest(DB_URL, args.source_table, args.output_table, logger)
+        logger.info("Volume/Open Interest analysis completed.")
         did_action = True
 
     if args.listtables:
